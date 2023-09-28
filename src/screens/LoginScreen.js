@@ -1,3 +1,5 @@
+//Login page with validation but without login api
+
 import React, { useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
@@ -57,9 +59,9 @@ export default function LoginScreen({ navigation }) {
         </Button>
 
         <View style={styles.row}> 
-          <Text>Don’t have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-            <Text style={styles.link}>Sign up</Text>
+          <Text>Continue as guest? </Text>
+          <TouchableOpacity onPress={() => navigation.replace('HomeScreen')}>
+            <Text style={styles.link}>Click here</Text>
           </TouchableOpacity>
         </View>
       </View>

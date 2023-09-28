@@ -1,22 +1,16 @@
-import React, {useContext, useState} from 'react'
+import React from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { AuthProvider } from './src/navi/AuthContext';
-import AppNav from './src/navi/AppNav'
-import { NavigationContainer } from '@react-navigation/native';
-
-
+import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
-function App() {
-  
-
-
-  return(
-    <AuthProvider>
-    <NavigationContainer>
-      <Stack.Screen
+const AuthStack = () => {
+  return (
+    <Stack.Navigator
+        initialRouteName='test' >
+        
+        <Stack.Screen
           name="test"
           component={test}
           options={{
@@ -37,9 +31,9 @@ function App() {
             headerShown: false
           }}
         />
-    </NavigationContainer>
-    </AuthProvider>
-  )
-}
+      
+      </Stack.Navigator>
+  );
+};
 
-export default App;
+export default AuthStack;

@@ -1,3 +1,4 @@
+//Home page to let user to logout and view profile
 import React from 'react'
 import Background from '../components/Background'
 import HomePic from '../components/HomePic'

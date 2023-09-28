@@ -1,3 +1,5 @@
+//THis is duplicated login page file for testing login api
+
 import React, {useContext, useState} from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
@@ -6,28 +8,52 @@ import { passwordValidator } from '../validation/passwordValidation'
 import Button from '../components/Button';
 import TextInput from '../components/TextInput'
 import { user_login } from '../api/user_api'
+import { AuthContext } from '../api/AuthContext'
 
 
+const LoginScreen = ({ navigation }) => {
 
+  const [username , setName] = useState('')  
+  const [password, setPassword] = useState('')
+  const {login} = useContext(AuthContext);
 
-export default function LoginScreen({ navigation }) {
-  const [username, setName] = useState({ value: '', error: '' })  
-  const [password, setPassword] = useState({ value: '', error: '' })
-  const {isLoading, login} = useContext(user_login);
-
+  /*const login = async () => {
+    const result = await onLogin(username, password);
+    if (result && result,error){
+      alert(result.msg)
+    }
+  };*/
   const onLoginPressed = () => {
-    const nameError = nameValidator(username.value);
-    const passwordError = passwordValidator(password.value);
+    const nameError = nameValidator(username.value)
+    const passwordError = passwordValidator(password.value)
 
     if (passwordError || nameError) {
-        setName({ ...username, error: nameError })
-        setPassword({ ...password, error: passwordError })
-        return
-      }
+      setName({ ...username, error: nameError })
+      setPassword({ ...password, error: passwordError })
+      return
+    }if( !passwordError || !nameError ){
+      user_login({
+        username: username.toLocaleLowerCase(),
+        password: password
+      })
+      .then((result) => {
+        console.log(result);
+        if(result.status ==200){
+          AsyncStorage.setItem("AccessToken", result.data.token)
+          navigation.replace("HomeScreen");
+        }
+      }).catch(err =>{
+        console.error(err)
+      })
+      
+    }else{
         navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }],
-        }) 
+          index: 0,
+          routes: [{ name: 'HomeScreen' }],
+        })
+        alert(passwordError)
+      }
+    
   }
 
   return (
@@ -41,14 +67,15 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(text) => setName({ value: text, error: '' })}
         error={!!username.error}
         errorText={username.error}
-        autoCapitalize="none"
         
         />
+        
 
         <TextInput 
         value={password.value}
         placeholder = "Enter Password:" 
         returnKeyType="done"
+        label="Password"
         onChangeText={(text) => setPassword({ value: text, error: '' })}
         error={!!password.error}
         errorText={password.error}
@@ -57,17 +84,16 @@ export default function LoginScreen({ navigation }) {
 
         <Button 
           mode="contained" 
-          onPress={(onLoginPressed) => {login(username, password);
-        }} 
-        title='Login'
+          onPress={onLoginPressed} 
+          title='Login'
         >
         Login
         </Button>
-
+        
         <View style={styles.row}> 
-          <Text>Don’t have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-            <Text style={styles.link}>Sign up</Text>
+          <Text>Continue as guest? </Text>
+          <TouchableOpacity onPress={() => navigation.replace('HomeScreen')}>
+            <Text style={styles.link}>Click here</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -98,3 +124,4 @@ const styles = StyleSheet.create({
   }
 });
 
+export default LoginScreen

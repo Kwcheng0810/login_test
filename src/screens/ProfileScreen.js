@@ -1,3 +1,4 @@
+//Profile page want to show user profile
 import React from 'react'
 import Background from '../components/Background'
 import Profile from '../components/Profile'
@@ -10,7 +11,6 @@ export default function ProfileScreen({ navigation }) {
     <Background>
       <Profile />
       <Paragraph>
-        You may press the Profile butoon to view your profile
       </Paragraph>
       
       <Button
